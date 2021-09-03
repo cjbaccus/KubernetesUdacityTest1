@@ -15,12 +15,27 @@ jobs:
 
     docker:
       - image: cimg/python:3.8
-
+    working_directory: ~/repo
+    
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
-
+#      - python/install-packages:
+#          pkg-manager: pip
+      - restore_cache:
+        keys:
+            - v1-dependancies-{{ checksum "requirements.txt" }}
+            - v1-dependancies-
+      - run:
+            name: install dependancies
+            command: |
+                python3 -m venv venv
+                . venv/bin/activate
+                make install
+      - save_cache:
+            paths:
+                - ./venv
+            keys: v1-dependancies-{{ checksum "requirements.txt" }}
+            
       - run:
           name: Run Lint
           # This assumes pytest is installed via the install-package step above
