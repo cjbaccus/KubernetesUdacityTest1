@@ -1,5 +1,5 @@
 #!/bin/env python
 
-def myfunc()
+def myfunc():
     return 1
 print(myfunc())
